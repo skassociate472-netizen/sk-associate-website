@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="S.K Associate Private Limited registration verification">
+<title>SKSVC Verification | S.K Associate</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="topbar">🔐 SKSVC • REGISTRATION VERIFICATION</div>
+<nav class="nav"><div class="navin">
+<a class="brand" href="index.html"><div class="mark">SK</div><div><div class="brandname">S.K ASSOCIATE</div><div class="brandsub">PRIVATE LIMITED</div><div class="supported">Supported by <b>TransIndia</b></div></div></a>
+<div class="navlinks"><a href="index.html">Home</a><a href="jobs.html">Apply Now</a></div>
+</div></nav>
+
+<main class="formWrap">
+<div class="formCard">
+<div class="mini">SKSVC • Secure Verification</div>
+<h1>Verify Registration</h1>
+<p class="desc">Enter the candidate details below. Your verification message will be generated using the name, date and automatically assigned registration number.</p>
+
+<div class="notice" style="margin:18px 0 20px;">
+<strong>Selection Process Information</strong><br><br>
+You are required to attend a selection process in Guindy, Chennai. A registration fee of ₹300 must be paid to attend, as this is a formal selection process rather than a standard interview. If you agree with the job timings and terms, an additional ₹500 will be required for your permanent ID and the official company application form. While the ₹500 payment is optional, the ₹300 registration fee is mandatory, bringing the total amount to ₹800.
+
+Prior to attending the selection process, you will receive a complete explanation regarding your job role, responsibilities, and comprehensive details about the company from A to Z. The job placement will be confirmed.
+</div>
+
+<form id="verifyForm">
+<div class="field"><label for="name">Full Name</label><input id="name" name="name" type="text" placeholder="Enter your full name" required></div>
+<div class="field"><label for="phone">Phone Number</label><input id="phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10-digit mobile number" required><div class="error" id="phoneError">Please enter a valid 10-digit phone number.</div></div>
+<div class="field"><label for="date">Selection / Registration Date</label><input id="date" name="date" type="date" required></div>
+<button class="btn primary" type="submit" style="width:100%">VERIFY & GENERATE MESSAGE →</button>
+</form>
+
+<div class="notice">The generated WhatsApp message is addressed to the official contact number configured on this page. WhatsApp will open with the message ready for you to review and send.</div>
+<div class="result" id="result"><h3>Verification Ready</h3><div class="reg" id="regNo"></div><p id="resultText"></p><pre id="preview" style="white-space:pre-wrap;margin-top:15px;color:#344054;font:14px/1.6 Arial,sans-serif;background:#fff;padding:14px;border-radius:10px;border:1px solid #dbe7df"></pre></div>
+</div>
+</main>
+
+<footer>© 2026 S.K Associate Private Limited • Supported by TransIndia</footer>
+
+<script>
+const form = document.getElementById('verifyForm');
+const phone = document.getElementById('phone');
+const phoneError = document.getElementById('phoneError');
+const result = document.getElementById('result');
+const regNo = document.getElementById('regNo');
+const resultText = document.getElementById('resultText');
+const preview = document.getElementById('preview');
+const COUNTER_KEY = 'skAssociateRegistrationCounter';
+
+function nextRegistrationNumber(){
+  let current = parseInt(localStorage.getItem(COUNTER_KEY) || '7', 10);
+  current += 1;
+  localStorage.setItem(COUNTER_KEY, String(current));
+  return String(current).padStart(2,'0');
+}
+
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim();
+  const userPhone = phone.value.trim();
+  const dateValue = document.getElementById('date').value;
+  if(!/^\d{10}$/.test(userPhone)){ phoneError.style.display='block'; phone.focus(); return; }
+  phoneError.style.display='none';
+
+  const registration = nextRegistrationNumber();
+  const date = new Date(dateValue + 'T00:00:00');
+  const formattedDate = date.toLocaleDateString('en-IN',{day:'numeric',month:'numeric',year:'numeric'});
+
+  /* The first paragraph is the user's supplied template, with only the requested fields replaced. */
+  const message = `Hello, ${name}
+
+Your name has been registered successfully.
+Registration Number:-${registration}
+Date: ${formattedDate}
+Interview Time : 09:30AM
+ID Proofs:
+passport size photo -2
+Adhar card xerox -1
+Bank Passbook Xerox-1
+Resume- 1 copy
+Application & ID Card - as applicable
+
+OFFICE ADDRESS:
+No.123, MOUNT ROAD, GUINDY
+LAND MARK: Guindy ESTATE BUS STOP
+Chennai-600032
+Contact: Mr. Vignesh
+CONTACT NO: 7092658723
+`;
+
+  regNo.textContent = 'Registration Number: ' + registration;
+  resultText.textContent = 'Your personalized message is ready. Review it below; WhatsApp will open next.';
+  preview.textContent = message;
+  result.style.display='block';
+
+  const whatsappNumber='917092658723';
+  const url='https://wa.me/'+whatsappNumber+'?text='+encodeURIComponent(message);
+  window.open(url,'_blank','noopener');
+});
+</script>
+</body></html>
